@@ -1,0 +1,38 @@
+name: 'GitHub Deployment Status Updater'
+description: 'Updates your deployment status to a desired one'
+author: 'Rostyslav Sotnychenko'
+branding:
+  icon: 'rss'
+  color: 'gray-dark'
+inputs:
+  status:
+    description: 'desired deployment status'
+    required: true
+  description:
+    default: ''
+    description: 'description to deployment status'
+  auto_inactive:
+    default: true
+    description: 'Adds a new inactive status to all prior non-transient, non-production environment deployments with the same repository and environment name as the created deployment status.'
+  environment_url:
+    default: ''
+    description: 'Sets the URL for accessing your environment'
+outputs:
+  deployment_id:
+    description: 'An ID of the deployment in GitHub'
+  description:
+    description: 'Description of the deployment'
+  state:
+    description: 'Deployment state'
+  ref:
+    description: 'Branch/tag name of the deployment source'
+  sha:
+    description: 'Revision of the deployment source'
+  environment:
+    description: 'Environment name'
+  payload:
+    description: 'Payload'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+
