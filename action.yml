@@ -1,5 +1,5 @@
-name: 'GitHub Deployment Status Updater'
-description: 'Updates your deployment status to a desired one'
+name: 'Deployment Status Update'
+description: 'Updates your Deployment status in GitHub to a desired one'
 author: 'Rostyslav Sotnychenko'
 branding:
   icon: 'rss'
