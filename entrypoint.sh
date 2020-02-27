@@ -6,7 +6,7 @@ if [ "${GITHUB_EVENT_NAME}" != "deployment" ]; then
 fi
 
 get_from_event() {
-  echo "$(jq -r "$1" ${GITHUB_EVENT_PATH})"
+  jq -r "$1" "${GITHUB_EVENT_PATH}"
 }
 
 GITHUB_API_DEPELOYMENTS_URL="$(get_from_event '.deployment.statuses_url')"
@@ -34,4 +34,3 @@ echo ::set-output name=ref::$(get_from_event '.deployment.ref')
 echo ::set-output name=sha::$(get_from_event '.deployment.sha')
 echo ::set-output name=environment::$(get_from_event '.deployment.environment')
 echo ::set-output name=payload::$(get_from_event '.deployment.payload')
-
