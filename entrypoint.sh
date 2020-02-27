@@ -9,11 +9,11 @@ get_from_event() {
   jq -r "$1" "${GITHUB_EVENT_PATH}"
 }
 
-GITHUB_API_DEPELOYMENTS_URL="$(get_from_event '.deployment.statuses_url')"
+GITHUB_API_DEPLOYMENTS_URL="$(get_from_event '.deployment.statuses_url')"
 GITHUB_ACTIONS_URL="$(get_from_event '.repository.html_url')/actions"
 
 curl --fail \
-    -X POST "${GITHUB_API_DEPELOYMENTS_URL}" \
+    -X POST "${GITHUB_API_DEPLOYMENTS_URL}" \
     -H "Authorization: token ${GITHUB_TOKEN}" \
     -H "Content-Type: text/json; charset=utf-8" \
     -H "Accept: application/vnd.github.ant-man-preview+json, application/vnd.github.flash-preview+json" \
