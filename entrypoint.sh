@@ -6,14 +6,19 @@ if [ "${GITHUB_EVENT_NAME}" != "deployment" ]; then
 fi
 
 get_from_event() {
-  echo "$(jq -r "$1" ${GITHUB_EVENT_PATH})"
+  jq -r "$1" "${GITHUB_EVENT_PATH}"
 }
 
-GITHUB_API_DEPELOYMENTS_URL="$(get_from_event '.deployment.statuses_url')"
+GITHUB_API_DEPLOYMENTS_URL="$(get_from_event '.deployment.statuses_url')"
 GITHUB_ACTIONS_URL="$(get_from_event '.repository.html_url')/actions"
+INPUT_STATUS=$(echo "$INPUT_STATUS" | tr '[:upper:]' '[:lower:]')
+if [ "$INPUT_STATUS" = cancelled ] ; then
+    echo "Rewriting status from cancelled to error"
+    INPUT_STATUS=error
+fi
 
 curl --fail \
-    -X POST "${GITHUB_API_DEPELOYMENTS_URL}" \
+    -X POST "${GITHUB_API_DEPLOYMENTS_URL}" \
     -H "Authorization: token ${GITHUB_TOKEN}" \
     -H "Content-Type: text/json; charset=utf-8" \
     -H "Accept: application/vnd.github.ant-man-preview+json, application/vnd.github.flash-preview+json" \
@@ -29,9 +34,8 @@ EOF
 
 echo ::set-output name=deployment_id::$(get_from_event '.deployment.id')
 echo ::set-output name=description::$(get_from_event '.deployment.description')
-echo ::set-output name=state::${INPUT_STATUS}
+echo ::set-output name=state::${INPUT_STATUS:-in_progress}
 echo ::set-output name=ref::$(get_from_event '.deployment.ref')
 echo ::set-output name=sha::$(get_from_event '.deployment.sha')
 echo ::set-output name=environment::$(get_from_event '.deployment.environment')
 echo ::set-output name=payload::$(get_from_event '.deployment.payload')
-

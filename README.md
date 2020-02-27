@@ -6,7 +6,7 @@ This action lets you easily update status of a Deployment on GitHub. Learn more 
 
 | Name            | Required | Default value  | Description                                                                                                                                                                                                                                               |
 |-----------------|----------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| status          | yes      | N/A            | Desired status of the Deployment. Can be one of `error`, `failure`, `inactive`, `in_progress`, `queued`, `pending` or `success`                                                                                                                           |
+| status          | no       | `in_progress`  | Desired status of the Deployment. Can be one of `error`, `failure`, `inactive`, `in_progress`, `queued`, `pending` or `success`                                                                                                                           |
 | description     | no       | <empty string> | A short description of the status. The maximum description length is 140 characters.                                                                                                                                                                      |
 | auto_inactive   | no       | true           | Adds a new inactive status to all prior non-transient, non-production environment deployments with the same repository and environment name as the created status's deployment. An inactive status is only added to deployments that had a success state. |
 | environment_url | no       | <empty string> | Sets the URL for accessing your environment.                                                                                                                                                                                                              |
@@ -39,8 +39,6 @@ jobs:
       - id: set_state_in_progress
         name: Set deployment status to [in_progress]
         uses: rsotnychenko/deployment-status-update@0.1.0
-        with:
-          status: in_progress
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to GAE
@@ -50,19 +48,12 @@ jobs:
           APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_TOKEN }}
         with:
           args: app deploy
-      - id: set_state_success
-        name: Set deployment status to [success]
+      - id: set_state_final
+        if: always()
+        name: Set deployment status
         uses: rsotnychenko/deployment-status-update@0.1.0
         with:
-          status: success
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - id: set_state_error
-        name: Set deployment status to [error]
-        if: failure()
-        uses: rsotnychenko/deployment-status-update@0.1.0
-        with:
-          status: error
+          status: ${{ job.status }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # TODO: Add rollback operations
