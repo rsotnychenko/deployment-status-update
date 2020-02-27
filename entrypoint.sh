@@ -11,6 +11,11 @@ get_from_event() {
 
 GITHUB_API_DEPLOYMENTS_URL="$(get_from_event '.deployment.statuses_url')"
 GITHUB_ACTIONS_URL="$(get_from_event '.repository.html_url')/actions"
+INPUT_STATUS=$(echo "$INPUT_STATUS" | tr '[:upper:]' '[:lower:]')
+if [ "$INPUT_STATUS" = cancelled ] ; then
+    echo "Rewriting status from cancelled to error"
+    INPUT_STATUS=error
+fi
 
 curl --fail \
     -X POST "${GITHUB_API_DEPLOYMENTS_URL}" \

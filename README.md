@@ -50,19 +50,12 @@ jobs:
           APPLICATION_CREDENTIALS: ${{ secrets.GCLOUD_TOKEN }}
         with:
           args: app deploy
-      - id: set_state_success
-        name: Set deployment status to [success]
+      - id: set_state_final
+        if: always()
+        name: Set deployment status
         uses: rsotnychenko/deployment-status-update@0.1.0
         with:
-          status: success
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - id: set_state_error
-        name: Set deployment status to [error]
-        if: failure()
-        uses: rsotnychenko/deployment-status-update@0.1.0
-        with:
-          status: error
+          status: ${{ job.status }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # TODO: Add rollback operations
