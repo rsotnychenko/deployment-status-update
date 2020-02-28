@@ -16,6 +16,7 @@ if [ "$INPUT_STATUS" = cancelled ] ; then
     echo "Rewriting status from cancelled to error"
     INPUT_STATUS=error
 fi
+: ${INPUT_STATUS:=in_progress} # set default
 
 curl --fail \
     -X POST "${GITHUB_API_DEPLOYMENTS_URL}" \
@@ -34,7 +35,7 @@ EOF
 
 echo ::set-output name=deployment_id::$(get_from_event '.deployment.id')
 echo ::set-output name=description::$(get_from_event '.deployment.description')
-echo ::set-output name=state::${INPUT_STATUS:-in_progress}
+echo ::set-output name=state::${INPUT_STATUS}
 echo ::set-output name=ref::$(get_from_event '.deployment.ref')
 echo ::set-output name=sha::$(get_from_event '.deployment.sha')
 echo ::set-output name=environment::$(get_from_event '.deployment.environment')
