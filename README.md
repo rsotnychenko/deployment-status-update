@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v1
       - id: set_state_in_progress
         name: Set deployment status to [in_progress]
-        uses: rsotnychenko/deployment-status-update@0.1.2
+        uses: rsotnychenko/deployment-status-update@0.1.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to GAE
@@ -51,7 +51,7 @@ jobs:
       - id: set_state_final
         if: always()
         name: Set deployment status
-        uses: rsotnychenko/deployment-status-update@0.1.2
+        uses: rsotnychenko/deployment-status-update@0.1.3
         with:
           status: ${{ job.status }}
         env:
