@@ -5,6 +5,9 @@ branding:
   icon: 'rss'
   color: 'gray-dark'
 inputs:
+  run_id:
+    description: 'Set this to `github.run_id` so the deployment status log URL can be properly set.'
+    required: true
   status:
     description: 'desired deployment status'
     required: true
@@ -17,6 +20,8 @@ inputs:
   environment_url:
     default: ''
     description: 'Sets the URL for accessing your environment'
+  deployment_status_url:
+    description: Override the default deployment status URL.
 outputs:
   deployment_id:
     description: 'An ID of the deployment in GitHub'
