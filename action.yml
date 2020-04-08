@@ -5,6 +5,9 @@ branding:
   icon: 'rss'
   color: 'gray-dark'
 inputs:
+  run_id:
+    description: 'Set this to `github.run_id` so the deployment status log URL can be properly set.'
+    required: true
   status:
     description: 'desired deployment status'
     required: true

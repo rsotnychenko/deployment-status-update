@@ -6,6 +6,7 @@ This action lets you easily update status of a Deployment on GitHub. Learn more 
 
 | Name            | Required | Default value  | Description                                                                                                                                                                                                                                               |
 |-----------------|----------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| run_id          | **yes**  |                | Set this to `${{ github.run_id }}` so the deployment status log URL can be properly set.                                                                                                                                                                  |
 | status          | no       | `in_progress`  | Desired status of the Deployment. Can be one of `error`, `failure`, `inactive`, `in_progress`, `queued`, `pending` or `success`                                                                                                                           |
 | description     | no       | <empty string> | A short description of the status. The maximum description length is 140 characters.                                                                                                                                                                      |
 | auto_inactive   | no       | true           | Adds a new inactive status to all prior non-transient, non-production environment deployments with the same repository and environment name as the created status's deployment. An inactive status is only added to deployments that had a success state. |
@@ -38,7 +39,9 @@ jobs:
       - uses: actions/checkout@v1
       - id: set_state_in_progress
         name: Set deployment status to [in_progress]
-        uses: rsotnychenko/deployment-status-update@0.1.3
+        uses: rsotnychenko/deployment-status-update@0.2.0
+        with:
+          run_id: ${{ github.run_id }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to GAE
@@ -51,9 +54,10 @@ jobs:
       - id: set_state_final
         if: always()
         name: Set deployment status
-        uses: rsotnychenko/deployment-status-update@0.1.3
+        uses: rsotnychenko/deployment-status-update@0.2.0
         with:
           status: ${{ job.status }}
+          run_id: ${{ github.run_id }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # TODO: Add rollback operations
