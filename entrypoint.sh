@@ -5,6 +5,10 @@ get_from_event() {
 }
 
 # Test required inputs are set
+if [ -z "${INPUT_STATUS}" ]; then
+  echo "Missing input status"
+  exit 1
+fi
 if [ -z "${INPUT_RUN_ID:-}" ]; then
     echo "Missing input run_id"
     exit 1
@@ -26,7 +30,6 @@ if [ "$INPUT_STATUS" = cancelled ] ; then
     echo "Rewriting status from cancelled to error"
     INPUT_STATUS=error
 fi
-: ${INPUT_STATUS:=in_progress} # set default
 
 curl --fail \
     -X POST "${GITHUB_API_DEPLOYMENTS_URL}" \
