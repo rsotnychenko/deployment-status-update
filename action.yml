@@ -20,6 +20,8 @@ inputs:
   environment_url:
     default: ''
     description: 'Sets the URL for accessing your environment'
+  deployment_status_url:
+    description: Override the default deployment status URL.
 outputs:
   deployment_id:
     description: 'An ID of the deployment in GitHub'

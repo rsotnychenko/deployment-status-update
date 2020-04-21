@@ -1,10 +1,5 @@
 #!/bin/ash -xe
 
-if [ "${GITHUB_EVENT_NAME}" != "deployment" ]; then
-  echo "Expected GITHUB_EVENT_NAME=deployment, got [${GITHUB_EVENT_NAME}]"
-  exit 1
-fi
-
 get_from_event() {
   jq -r "$1" "${GITHUB_EVENT_PATH}"
 }
@@ -14,9 +9,17 @@ if [ -z "${INPUT_RUN_ID:-}" ]; then
     echo "Missing input run_id"
     exit 1
 fi
+if [ -n "${INPUT_DEPLOYMENT_STATUS_URL:-}" ]; then
+    GITHUB_API_DEPLOYMENTS_URL=$INPUT_DEPLOYMENT_STATUS_URL
+else
+    GITHUB_API_DEPLOYMENTS_URL="$(get_from_event '.deployment.statuses_url')"
+    if [ "$GITHUB_API_DEPLOYMENTS_URL" = "null" ]; then
+      echo "Couldn't detect deployment URL from the GitHub Actions workflow event. If you aren't running from a 'deployment' event, you must set the 'deployment_status_url' input."
+      exit 1
+    fi
+fi
 
 # Set variables
-GITHUB_API_DEPLOYMENTS_URL="$(get_from_event '.deployment.statuses_url')"
 GITHUB_ACTIONS_RUN_URL="$(get_from_event '.repository.html_url')/actions/runs/$INPUT_RUN_ID"
 INPUT_STATUS=$(echo "$INPUT_STATUS" | tr '[:upper:]' '[:lower:]')
 if [ "$INPUT_STATUS" = cancelled ] ; then

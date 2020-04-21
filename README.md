@@ -11,6 +11,7 @@ This action lets you easily update status of a Deployment on GitHub. Learn more 
 | description     | no       | <empty string> | A short description of the status. The maximum description length is 140 characters.                                                                                                                                                                      |
 | auto_inactive   | no       | true           | Adds a new inactive status to all prior non-transient, non-production environment deployments with the same repository and environment name as the created status's deployment. An inactive status is only added to deployments that had a success state. |
 | environment_url | no       | <empty string> | Sets the URL for accessing your environment.                                                                                                                                                                                                              |
+| deployment_status_url | no       | (loaded from event) | Explicitly specify the deployment status URL to post the deployment status to. Normally, this will be auto-detected from the GitHub Actions [`DeploymentEvent`](https://developer.github.com/v3/activity/events/types/#deploymentevent) payload. However, if you are runnning from another event type or want to override the deployment to update, you can manually specify the full `https://api.github.com/repos/:owner/:repo/deployments/:deployment_id/statuses` URL here. |
 
 ## Action outputs
 
