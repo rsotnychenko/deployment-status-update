@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v1
       - id: set_state_in_progress
         name: Set deployment status to [in_progress]
-        uses: rsotnychenko/deployment-status-update@0.2.0
+        uses: rsotnychenko/deployment-status-update@0.2.1
         with:
           run_id: ${{ github.run_id }}
           status: in_progress
@@ -56,7 +56,7 @@ jobs:
       - id: set_state_final
         if: always()
         name: Set deployment status
-        uses: rsotnychenko/deployment-status-update@0.2.0
+        uses: rsotnychenko/deployment-status-update@0.2.1
         with:
           status: ${{ job.status }}
           run_id: ${{ github.run_id }}

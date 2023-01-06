@@ -46,10 +46,10 @@ curl --fail \
 }
 EOF
 
-echo ::set-output name=deployment_id::$(get_from_event '.deployment.id')
-echo ::set-output name=description::$(get_from_event '.deployment.description')
-echo ::set-output name=state::${INPUT_STATUS}
-echo ::set-output name=ref::$(get_from_event '.deployment.ref')
-echo ::set-output name=sha::$(get_from_event '.deployment.sha')
-echo ::set-output name=environment::$(get_from_event '.deployment.environment')
-echo ::set-output name=payload::$(get_from_event '.deployment.payload')
+echo "deployment_id=$(get_from_event '.deployment.id')" >> $GITHUB_OUTPUT
+echo "description=$(get_from_event '.deployment.description')" >> $GITHUB_OUTPUT
+echo "state=${INPUT_STATUS}" >> $GITHUB_OUTPUT
+echo "ref=$(get_from_event '.deployment.ref')" >> $GITHUB_OUTPUT
+echo "sha=$(get_from_event '.deployment.sha')" >> $GITHUB_OUTPUT
+echo "environment=$(get_from_event '.deployment.environment')" >> $GITHUB_OUTPUT
+echo "payload=$(get_from_event '.deployment.payload')" >> $GITHUB_OUTPUT
