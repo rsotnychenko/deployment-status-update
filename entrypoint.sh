@@ -52,4 +52,4 @@ echo "state=${INPUT_STATUS}" >> $GITHUB_OUTPUT
 echo "ref=$(get_from_event '.deployment.ref')" >> $GITHUB_OUTPUT
 echo "sha=$(get_from_event '.deployment.sha')" >> $GITHUB_OUTPUT
 echo "environment=$(get_from_event '.deployment.environment')" >> $GITHUB_OUTPUT
-echo "payload=$(get_from_event '.deployment.payload')" >> $GITHUB_OUTPUT
+echo "payload=$(get_from_event '.deployment.payload|tostring')" >> $GITHUB_OUTPUT
