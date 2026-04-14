@@ -52,4 +52,8 @@ echo "state=${INPUT_STATUS}" >> $GITHUB_OUTPUT
 echo "ref=$(get_from_event '.deployment.ref')" >> $GITHUB_OUTPUT
 echo "sha=$(get_from_event '.deployment.sha')" >> $GITHUB_OUTPUT
 echo "environment=$(get_from_event '.deployment.environment')" >> $GITHUB_OUTPUT
-printf 'payload<<%s\n%s\n%s\n' "EOF" "$(get_from_event '.deployment.payload')" "EOF" >> "$GITHUB_OUTPUT"
+{
+  echo 'payload<<EOF'
+  get_from_event '.deployment.payload'
+  echo EOF
+} >> "$GITHUB_OUTPUT"
